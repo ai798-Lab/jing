@@ -2,12 +2,20 @@
 
 给一人公司立的四面镜子。让 AI 用你自己的协作数据，每月认真地审你一次，最后给这个月上一个谥号。
 
-**EN TL;DR** : jing ("mirror") is a Claude Code skill for solo builders. Once a month, it audits you, not your code: it mines your own AI-collaboration data (session logs, memory files, artifacts, git history) through four personas (Jobs on product, Wang Xiaobo on self-deception, Kubrick on craft, first principles on facts), cross-examines its own findings with an adversarial review agent, then condenses your month into a single posthumous-style character, the way ancient China condensed an emperor's whole reign into one. Install: `git clone https://github.com/ai798-Lab/jing.git ~/.claude/skills/jing`, then tell Claude Code "照一下这个月" (mirror this month). Chinese-first docs below.
+Four mirrors for a company of one. A Claude Code skill that audits you, not your code, from your own AI-collaboration data, and condenses each month into a single posthumous-style character.
+
+**[中文](#中文)** · **[English](#english)**
+
+---
+
+<a id="中文"></a>
+
+## 中文
 
 > 以铜为镜，可以正衣冠；以史为镜，可以知兴替；以人为镜，可以明得失。
 > 唐太宗有魏征（他身边那位专职当面说真话的谏臣），一人公司没有。这四面镜子就是给自己立的。
 
-## 它是什么
+### 它是什么
 
 「镜」是一个 [Claude Code](https://claude.com/claude-code) skill。你和 AI 协作得越多，留下的行为数据就越诚实：几百条 user 消息里藏着你打回产出的真实理由、你的高频批评词、你拍板时的犹豫、你说了没做的每一条「下一步」。这些数据你自己从来不看，它替你看。
 
@@ -22,7 +30,7 @@
 
 输出是一份镜鉴：数据速览、四镜成像、共识与分歧、决议与跟踪，末尾为这个月上一字谥号。
 
-## 四面镜子
+### 四面镜子
 
 | 镜 | 照什么 | 一句典型照法 |
 |---|---|---|
@@ -35,7 +43,7 @@
 
 四镜独立成像，成像前不许看彼此的输出。镜与镜矛盾是特性不是 bug，分歧原样保留进纪要。每面镜子都带失效条件：乔镜对探索期工作降音量，王镜必须带幽默感否则变刻薄，库镜不许对原型要求完美，一原镜对关系、玩、审美只报数据不下结论。
 
-## 它和普通「AI 复盘」的区别
+### 它和普通「AI 复盘」的区别
 
 多数复盘产出的是你自己五分钟就能总结出来的东西。镜有六条硬规则防止这件事：
 
@@ -46,7 +54,7 @@
 5. **环比裁决**：从第二期起，上期暴露的问题、决议、预测必须逐条判「实质改变 / 无变化 / 恶化」，禁止和稀泥词，边界情况按更差的判。
 6. **可证伪预测**：每个大结论附一条对下月具体行为的预测，下次照镜先验预测，预测错了结论降级。
 
-## 谥
+### 谥
 
 谥号：中国古代给帝王将相死后上的一字评价，一个字盖棺定论一生（隋炀帝的「炀」，是这套制度里最狠的差评之一）。镜借这个制度，一个字盖棺定论一个月。
 
@@ -54,7 +62,7 @@
 
 次月凭决议执行情况可改谥。谥号的作用不是羞辱，是把一个月压缩成一个字，让你记得住。
 
-## 镜的自知
+### 镜的自知
 
 这个 skill 最重要的部分可能是它对自身局限的声明。八条局限，每条配对应机制，随每次照镜执行，不是免责声明：
 
@@ -69,7 +77,7 @@
 | 四镜独立是弱独立（共享数据包） | 分歧原样保留，不许调和 |
 | 结论缺可证伪性 | 大结论必附下月预测，下期先验预测 |
 
-## 安装与使用
+### 安装与使用
 
 ```bash
 git clone https://github.com/ai798-Lab/jing.git ~/.claude/skills/jing
@@ -90,13 +98,113 @@ git clone https://github.com/ai798-Lab/jing.git ~/.claude/skills/jing
 
 首次照镜会和你确认归档目录（镜鉴 HTML 与基线库的落盘处）。
 
-## 隐私
+### 隐私
 
 镜不向任何第三方发送数据：没有自己的服务器，不做任何额外上传，镜鉴归档在你指定的本地目录。分析本身由你的 Claude Code 会话完成，会话数据经由模型 API 处理，隐私边界与你日常使用 Claude Code 完全相同。开源的只是方法，不是任何人的数据。
 
-## 一个真实的教训
+### 一个真实的教训
 
 这套 skill 的第一版产出被照镜人当场打回：「很多都是我自己能观察到的。」升级后才有了本人测试、语言指纹取证和对抗复核。如果你用它照出来的东西让你觉得「还行，都知道」，那就是镜子失职，应该按这个标准打回它。
+
+---
+
+<a id="english"></a>
+
+## English
+
+> "With bronze as a mirror, one can straighten one's robes; with history as a mirror, one can know the rise and fall of dynasties; with a person as a mirror, one can see one's own gains and losses."
+> Emperor Taizong of Tang had Wei Zheng, the minister whose entire job was telling the emperor the truth to his face. A company of one has nobody. These four mirrors are the ones you install for yourself.
+
+### What it is
+
+jing (镜, "mirror") is a [Claude Code](https://claude.com/claude-code) skill. The more you work with AI, the more honest a behavioral record you leave behind: hundreds of user messages containing the real reasons you rejected outputs, your recurring words of criticism, your hesitation at decision points, and every "next step" you promised and never took. You never look at this data. The mirror does.
+
+Once a month, it reads four kinds of local data:
+
+| Source | What it reveals |
+|---|---|
+| Session logs (`~/.claude/projects/`, optionally `~/.codex/`) | Where your time actually went, your linguistic fingerprint, how you decide |
+| Memory work-threads | Said but not done, done but not said, drifting narratives |
+| Artifact files | Real completion quality (opened and inspected frame by frame, not judged from a list) |
+| Git history | The exact moment each project line lived or died |
+
+The output is a mirror report: data overview, four independent mirror readings, consensus and disagreements, resolutions with follow-ups, and at the end, one character that names your month.
+
+### The four mirrors
+
+| Mirror | What it examines | A typical question |
+|---|---|---|
+| Jobs as mirror | Product sense: should this thing exist at all | If you could keep only one thing, which one, and on what grounds? |
+| Wang Xiaobo as mirror | Self-deception: are you lying to yourself | Which project have you been avoiding the verdict on? |
+| Kubrick as mirror | Craft: do the details deserve the ambition | Does your best work survive a frame-by-frame pause? |
+| First principles as mirror | Facts: strip the analogies and inertia | Does your time distribution match your stated priorities? |
+
+(Wang Xiaobo: a Chinese writer famous for irony and ruthless honesty, whose lifelong subject was how people avoid deceiving themselves. That is why he guards this mirror.)
+
+The four mirrors read independently and may not see each other's output before committing their own. Contradiction between mirrors is a feature, not a bug; disagreements are preserved verbatim. Each mirror carries its own failure conditions: the Jobs mirror lowers its voice for exploratory work, the Wang mirror must keep its sense of humor or it turns cruel, the Kubrick mirror may not demand polish from prototypes, and the first-principles mirror reports data only, no verdicts, on relationships, play, and aesthetics.
+
+### How it differs from ordinary "AI retrospectives"
+
+Most retrospectives produce what you could have summarized yourself in five minutes. Six hard rules prevent that:
+
+1. **Reflect, never console.** Every judgment must cite concrete evidence: a specific session, file, or data range. Opinions without evidence do not enter the report.
+2. **The self-test.** Before delivery, every observation gets asked: could the person summarize this themselves in five minutes? If yes, delete it. The mirror keeps only evidenced surprises.
+3. **Mirror the person, not just the work.** Project lists are events; the mirror studies you: how you give instructions, why you reject outputs, your verbal tics, how your story drifts over time. Behavioral data is worth an order of magnitude more than metadata.
+4. **Adversarial review.** After the four mirrors commit, an independent agent attacks their evidence: are the quotes real? Is the interpretation unique? Is there a more mundane explanation? Findings go into the report.
+5. **Month-over-month rulings.** From the second session on, every problem, resolution, and prediction from previous reports gets an explicit verdict: substantially changed, unchanged, or worse. No hedging language; borderline cases get the harsher ruling.
+6. **Falsifiable predictions.** Every major conclusion ships with a concrete prediction about next month's behavior. The next session verifies predictions first; failed predictions demote their conclusions.
+
+### The posthumous name
+
+In imperial China, an emperor or minister received a posthumous name: one character that passed final judgment on an entire life. Emperor Yang of Sui got 炀 ("yang": neglected his people, abandoned the rites), one of the harshest verdicts the system ever issued. The mirror borrows this institution to pass judgment on a month.
+
+At each month's end the four mirrors deliberate and select one character, following traditional usage from the Shifa (the classical book of posthumous naming), with source and reasoning attached. A month of tireless building with zero verification might earn 炀. A month that opened many fronts with real toil but defended none of the ground might earn 襄 ("xiang": expanded territory with merit, labored in armor). Pay off the debts and establish real rules, and the name can be revised to 成 ("cheng": brought peace and sound governance).
+
+The point of the name is not humiliation. It compresses a month into one character you will actually remember.
+
+### Self-knowledge
+
+The most important part of this skill may be its declared limitations. Eight of them, each paired with a working mechanism that runs at every session, not a disclaimer:
+
+| Limitation | Countermeasure |
+|---|---|
+| The judge is an accomplice (AI auditing output it helped produce) | Independent adversarial reviewer attacks the evidence |
+| Only the AI-facing side of life is visible | Conclusions declare their confidence ceiling |
+| Negativity bias (harsher reads as deeper) | Reviewer specifically hunts "most" inflated into "all" |
+| A single month has no baseline | Baselines persisted monthly; word frequencies must report deltas |
+| Motive attribution overreach | Psychology inferred from behavior must be tagged as speculation |
+| The cure can repeat the disease | Resolutions without an external hook may not enter the report |
+| Four-mirror independence is weak (shared evidence pack) | Disagreements preserved verbatim, never reconciled |
+| Conclusions resist falsification | Every major conclusion ships a testable prediction, verified first next session |
+
+### Install and use
+
+```bash
+git clone https://github.com/ai798-Lab/jing.git ~/.claude/skills/jing
+```
+
+Then tell Claude Code (Chinese trigger phrases work best; English equivalents in parentheses):
+
+- 「照一下这个月」("mirror this month"): full session, with parallel evidence collection, four isolated mirror readings, adversarial review, and a final report
+- 「照一下这周」("mirror this week"): quick snapshot, one agent walks through all four mirrors, condensed output
+- 「我在浪费生命吗」("am I wasting my life"): also triggers; the mirror answers with data
+
+Read before installing:
+
+- **Data threshold (matters most).** The mirror reads your history. A fresh Claude Code install has nothing to reflect. Use it actively for 2 to 4 weeks and accumulate a few hundred of your own messages before the first session. With insufficient data the mirror should say so plainly instead of forcing a report.
+- **Environment.** Requires a Claude Code version that supports the personal skills directory (`~/.claude/skills/`); evidence scripts use python3.
+- **Memory is optional.** Without auto-memory, the "said versus done ledger" layer is skipped and declared in the report; the other three layers run as normal.
+- **Cost.** A full monthly session runs about 9 to 10 agents (four evidence collectors, four mirrors, one reviewer), typically tens of minutes and on the order of a million tokens. Run the full session at month's end; use snapshots day to day.
+
+The first session will confirm an archive directory with you (where mirror reports and the baseline file live).
+
+### Privacy
+
+The mirror sends nothing to any third party: no server of its own, no extra uploads, and reports are archived in a local directory you choose. The analysis itself is performed by your own Claude Code session, so your data passes through the model API exactly as it does in your everyday usage; the privacy boundary is identical. What is open-sourced here is the method, never anyone's data.
+
+### A true lesson
+
+The first version of this skill had its output rejected on the spot: "Most of this I could have observed myself." Only after that rejection did the self-test, linguistic-fingerprint forensics, and adversarial review exist. If what it shows you feels like "fine, I knew all that," the mirror has failed, and you should reject it by exactly that standard.
 
 ## License
 
