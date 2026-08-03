@@ -19,16 +19,21 @@ Four mirrors for a company of one. A Claude Code skill that audits you, not your
 
 「镜」是一个 [Claude Code](https://claude.com/claude-code) skill。你和 AI 协作得越多，留下的行为数据就越诚实：几百条 user 消息里藏着你打回产出的真实理由、你的高频批评词、你拍板时的犹豫、你说了没做的每一条「下一步」。这些数据你自己从来不看，它替你看。
 
-每月照一次，输入是四类本地数据：
+每月照一次，输入是本地数据的七层取证：
 
-| 数据源 | 照出什么 |
+| 取证层 | 照出什么 |
 |---|---|
-| 会话记录（`~/.claude/projects/`，可选 `~/.codex/`） | 时间流向、语言指纹、决策方式 |
-| memory 工作线 | 说了没做、做了没说、说法漂移 |
-| 产出物文件 | 真实完成度（打开逐帧检查，不看清单） |
-| git 历史 | 每条线的生死时刻 |
+| 时间与分布 | 时间的真实流向，与你嘴上说的优先级对不对得上 |
+| 语言指纹 | 你打回产出的真实理由、高频批评词、拍板方式、说法随时间的漂移 |
+| 产出物实检 | 真实完成度（打开逐帧检查，不看清单） |
+| 言行差账本 | 说了没做、做了没说、说法漂移 |
+| **AI 产出的命运** | 你让 AI 做的东西后来死于何处：被采纳 / 被重做 N 版 / 被扔掉 / 完工后再没打开 |
+| **taste diff** | 从打回案例的 v1 与终版对比里，编译出你的品味函数 |
+| **协作病理与浪费账本** | 人机界面本身在哪漏水，AI 侧哪些劳动毫无意义，以及每条浪费对应的禁令 |
 
-输出是一份镜鉴：数据速览、四镜成像、共识与分歧、决议与跟踪，末尾为这个月上一字谥号。
+后三层是 v0.2 新增的，也是最值钱的三层：前四层照的是「你做了什么」，后三层第一次照「AI 做了什么、结局如何、你的品味长什么样」。
+
+输出是一份镜鉴：数据速览、环比裁决、四镜成像、作废清单、浪费账本与禁令、共识与分歧、决议与跟踪，末尾为这个月上一字谥号。
 
 ### 四面镜子
 
@@ -45,14 +50,18 @@ Four mirrors for a company of one. A Claude Code skill that audits you, not your
 
 ### 它和普通「AI 复盘」的区别
 
-多数复盘产出的是你自己五分钟就能总结出来的东西。镜有六条硬规则防止这件事：
+多数复盘产出的是你自己五分钟就能总结出来的东西。镜有八条硬规则防止这件事：
 
 1. **只照见，不安慰**：每条判断必须引用具体证据（某个会话、某个文件、某段数据），说不出证据的意见不进纪要。
 2. **本人测试**：交稿前每条观察问一遍「照镜人自己五分钟能总结出这条吗」，能，就删。镜只留有证据的意外。
 3. **照人，不只照事**：项目清单是事，镜子照的是人。行为层数据（user 消息流）比元数据（会话数量）值钱一个量级。
-4. **对抗复核**：四镜成像后，一个独立复核 agent 专职攻击四镜的证据引用：引文属实吗？解读唯一吗？有没有更平凡的解释？复核结果进纪要。
+4. **对抗复核**：四镜成像后，一个独立复核 agent 专职攻击四镜的证据引用：引文属实吗？解读唯一吗？有没有更平凡的解释？必须回原始文件亲验，不采信转述。
 5. **环比裁决**：从第二期起，上期暴露的问题、决议、预测必须逐条判「实质改变 / 无变化 / 恶化」，禁止和稀泥词，边界情况按更差的判。
 6. **可证伪预测**：每个大结论附一条对下月具体行为的预测，下次照镜先验预测，预测错了结论降级。
+7. **指标的构造效度**：任何自造指标在用它下结论前，先问这个定义会不会让结论变成同义反复。过不了就改名，改名后站不住就删。
+8. **越抓眼球的发现，验得越狠**：「与常识相反」是危险信号不是加分项，必须额外亲验并公示记录。
+
+第 7、8 条是被自己的复核打脸打出来的，故事见下。
 
 ### 谥
 
@@ -102,9 +111,17 @@ git clone https://github.com/ai798-Lab/jing.git ~/.claude/skills/jing
 
 镜不向任何第三方发送数据：没有自己的服务器，不做任何额外上传，镜鉴归档在你指定的本地目录。分析本身由你的 Claude Code 会话完成，会话数据经由模型 API 处理，隐私边界与你日常使用 Claude Code 完全相同。开源的只是方法，不是任何人的数据。
 
-### 一个真实的教训
+### 两个真实的教训
 
-这套 skill 的第一版产出被照镜人当场打回：「很多都是我自己能观察到的。」升级后才有了本人测试、语言指纹取证和对抗复核。如果你用它照出来的东西让你觉得「还行，都知道」，那就是镜子失职，应该按这个标准打回它。
+**第一个：不够深。**这套 skill 的第一版产出被照镜人当场打回：「很多都是我自己能观察到的。」升级后才有了本人测试、语言指纹取证和对抗复核。如果你用它照出来的东西让你觉得「还行，都知道」，那就是镜子失职，应该按这个标准打回它。
+
+**第二个：为了深而超调。**第三次照镜时，四镜交出了一条漂亮的反直觉发现：「人一离场，AI 不减速，AI 加速，自驱返工率从 50% 跳到 97%。」还配了图。
+
+对抗复核回原始数据一查，发现这个指标的定义是「两次写入之间没夹真人消息的比例」。人离场时它必然趋近 100%，这是算术不是发现。更糟的是，那些被称作「返工」的轮次里 74% 在往文件里净增内容，某个文件的全部内容都是通过这些所谓的返工轮次写到盘上的。同一次复核还整条驳回了另外三条观察，查出 7 处假数字。
+
+那一版报告如果直接交出去，会比修正后的版本读起来更精彩。**这就是负面偏置：一面被「不够深」驱动的镜子，有把审视变成表演的激励。**所以现在的镜鉴里有一节叫「作废清单」，专门公示复核驳回了什么。读者有权知道这份纪要差点告诉他什么。
+
+如果你的复核某次零驳回，先怀疑复核在放水，而不是镜子变准了。
 
 ---
 
@@ -119,16 +136,21 @@ git clone https://github.com/ai798-Lab/jing.git ~/.claude/skills/jing
 
 jing (镜, "mirror") is a [Claude Code](https://claude.com/claude-code) skill. The more you work with AI, the more honest a behavioral record you leave behind: hundreds of user messages containing the real reasons you rejected outputs, your recurring words of criticism, your hesitation at decision points, and every "next step" you promised and never took. You never look at this data. The mirror does.
 
-Once a month, it reads four kinds of local data:
+Once a month, it runs seven layers of forensics over local data:
 
-| Source | What it reveals |
+| Layer | What it reveals |
 |---|---|
-| Session logs (`~/.claude/projects/`, optionally `~/.codex/`) | Where your time actually went, your linguistic fingerprint, how you decide |
-| Memory work-threads | Said but not done, done but not said, drifting narratives |
-| Artifact files | Real completion quality (opened and inspected frame by frame, not judged from a list) |
-| Git history | The exact moment each project line lived or died |
+| Time and distribution | Where your time actually went, and whether that matches your stated priorities |
+| Linguistic fingerprint | Why you really reject work, your recurring criticisms, how you decide, how your story drifts |
+| Artifact inspection | Real completion quality (opened and inspected frame by frame, not judged from a list) |
+| Said-versus-done ledger | Promised but not done, done but never recorded, quietly rewritten history |
+| **The fate of AI output** | Where the things you asked for actually died: adopted / redone N times / thrown away / never opened again after completion |
+| **Taste diff** | Your taste function, compiled from v1-versus-final diffs of the work you rejected |
+| **Collaboration pathology and waste ledger** | Where the human-AI interface leaks, which AI labor was meaningless, and the specific prohibition each waste item implies |
 
-The output is a mirror report: data overview, four independent mirror readings, consensus and disagreements, resolutions with follow-ups, and at the end, one character that names your month.
+The last three layers are new in v0.2 and are the valuable ones. The first four examine what you did; the last three are the first look at what the AI did, how it ended, and what your taste actually looks like when written down.
+
+The output is a mirror report: data overview, month-over-month rulings, four independent mirror readings, a retraction list, the waste ledger with its prohibitions, consensus and disagreements, resolutions with follow-ups, and at the end, one character that names your month.
 
 ### The four mirrors
 
@@ -145,14 +167,18 @@ The four mirrors read independently and may not see each other's output before c
 
 ### How it differs from ordinary "AI retrospectives"
 
-Most retrospectives produce what you could have summarized yourself in five minutes. Six hard rules prevent that:
+Most retrospectives produce what you could have summarized yourself in five minutes. Eight hard rules prevent that:
 
 1. **Reflect, never console.** Every judgment must cite concrete evidence: a specific session, file, or data range. Opinions without evidence do not enter the report.
 2. **The self-test.** Before delivery, every observation gets asked: could the person summarize this themselves in five minutes? If yes, delete it. The mirror keeps only evidenced surprises.
 3. **Mirror the person, not just the work.** Project lists are events; the mirror studies you: how you give instructions, why you reject outputs, your verbal tics, how your story drifts over time. Behavioral data is worth an order of magnitude more than metadata.
-4. **Adversarial review.** After the four mirrors commit, an independent agent attacks their evidence: are the quotes real? Is the interpretation unique? Is there a more mundane explanation? Findings go into the report.
+4. **Adversarial review.** After the four mirrors commit, an independent agent attacks their evidence: are the quotes real? Is the interpretation unique? Is there a more mundane explanation? It must verify against raw files, never against the forensic layer's own summary.
 5. **Month-over-month rulings.** From the second session on, every problem, resolution, and prediction from previous reports gets an explicit verdict: substantially changed, unchanged, or worse. No hedging language; borderline cases get the harsher ruling.
 6. **Falsifiable predictions.** Every major conclusion ships with a concrete prediction about next month's behavior. The next session verifies predictions first; failed predictions demote their conclusions.
+7. **Construct validity of every metric.** Before any home-made metric supports a conclusion, ask whether its definition makes that conclusion a tautology. Fails the test, rename it; still doesn't stand after renaming, delete it.
+8. **The more striking the finding, the harder it gets verified.** "Counterintuitive" is a warning sign, not a selling point. Such claims require extra hand-verification against raw data, with the verification log published in the report.
+
+Rules 7 and 8 exist because the mirror's own reviewer caught it cheating. That story is below.
 
 ### The posthumous name
 
@@ -202,9 +228,17 @@ The first session will confirm an archive directory with you (where mirror repor
 
 The mirror sends nothing to any third party: no server of its own, no extra uploads, and reports are archived in a local directory you choose. The analysis itself is performed by your own Claude Code session, so your data passes through the model API exactly as it does in your everyday usage; the privacy boundary is identical. What is open-sourced here is the method, never anyone's data.
 
-### A true lesson
+### Two true lessons
 
-The first version of this skill had its output rejected on the spot: "Most of this I could have observed myself." Only after that rejection did the self-test, linguistic-fingerprint forensics, and adversarial review exist. If what it shows you feels like "fine, I knew all that," the mirror has failed, and you should reject it by exactly that standard.
+**First: not deep enough.** The first version of this skill had its output rejected on the spot: "Most of this I could have observed myself." Only after that rejection did the self-test, linguistic-fingerprint forensics, and adversarial review exist. If what it shows you feels like "fine, I knew all that," the mirror has failed, and you should reject it by exactly that standard.
+
+**Second: overcorrecting toward depth.** On the third run, the four mirrors delivered a beautiful counterintuitive finding: "When the human leaves, the AI does not slow down. It accelerates. Self-driven rework jumps from 50% to 97%." It even came with a chart.
+
+The adversarial reviewer went back to the raw data and found that the metric was defined as "the share of writes with no human message in between." When the human is away, that share necessarily approaches 100%. That is arithmetic, not a discovery. Worse: 74% of those so-called rework rounds were net-additive, and one file's entire contents had reached disk through them. The same review threw out three more observations outright and caught seven false numbers.
+
+Had that version shipped, it would have read better than the corrected one. **That is negativity bias in the flesh: a mirror driven by "not deep enough" has an incentive to turn scrutiny into performance.** So every report now carries a retraction section that publishes what the review threw out. Readers deserve to know what the report almost told them.
+
+If your review ever comes back with zero rejections, suspect the reviewer of going soft before you conclude the mirror got accurate.
 
 ## License
 
