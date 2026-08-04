@@ -30,8 +30,10 @@ Four mirrors for a company of one. A Claude Code skill that audits you, not your
 | **AI 产出的命运** | 你让 AI 做的东西后来死于何处：被采纳 / 被重做 N 版 / 被扔掉 / 完工后再没打开 |
 | **taste diff** | 从打回案例的 v1 与终版对比里，编译出你的品味函数 |
 | **协作病理与浪费账本** | 人机界面本身在哪漏水，AI 侧哪些劳动毫无意义，以及每条浪费对应的禁令 |
+| **工具存量盘点** | 你装了多少 skill，其中多少是活的。含「自建但从未被自己用过」清单，以及无效加载烧掉的 token |
+| **踩坑萃取率** | 踩了之后是长记性还是反复踩。萃取与复发交叉出四象限，最值钱的是「已萃取但仍复发」那一格 |
 
-后三层是 v0.2 新增的，也是最值钱的三层：前四层照的是「你做了什么」，后三层第一次照「AI 做了什么、结局如何、你的品味长什么样」。
+后五层是 v0.2 新增的：前四层照的是「你做了什么」，后五层第一次照「AI 做了什么、结局如何、你的品味长什么样、你的工具有多少在活着、你的坑有多少变成了资产」。
 
 输出是一份镜鉴：数据速览、环比裁决、四镜成像、作废清单、浪费账本与禁令、共识与分歧、决议与跟踪，末尾为这个月上一字谥号。
 
@@ -147,8 +149,10 @@ Once a month, it runs seven layers of forensics over local data:
 | **The fate of AI output** | Where the things you asked for actually died: adopted / redone N times / thrown away / never opened again after completion |
 | **Taste diff** | Your taste function, compiled from v1-versus-final diffs of the work you rejected |
 | **Collaboration pathology and waste ledger** | Where the human-AI interface leaks, which AI labor was meaningless, and the specific prohibition each waste item implies |
+| **Tooling inventory** | How many skills you have installed and how many are actually alive, including the ones you built and never used yourself, plus the tokens burned on skills loaded but never followed |
+| **Pitfall-to-asset rate** | Whether hitting a wall taught you anything. Extraction and recurrence cross into four quadrants; the valuable one is "extracted and still recurring" |
 
-The last three layers are new in v0.2 and are the valuable ones. The first four examine what you did; the last three are the first look at what the AI did, how it ended, and what your taste actually looks like when written down.
+The last five layers are new in v0.2. The first four examine what you did; these five are the first look at what the AI did, how it ended, what your taste looks like written down, how much of your tooling is alive, and how many of your mistakes became assets.
 
 The output is a mirror report: data overview, month-over-month rulings, four independent mirror readings, a retraction list, the waste ledger with its prohibitions, consensus and disagreements, resolutions with follow-ups, and at the end, one character that names your month.
 
