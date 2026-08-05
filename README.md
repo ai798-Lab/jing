@@ -66,6 +66,18 @@ Four mirrors for a company of one. A Claude Code skill that audits you, not your
 
 第 7、8 条是被自己的复核打脸打出来的，故事见下。
 
+### 取证的已知陷阱
+
+数据清洗做错，后面所有分析都是废的，而且错得悄无声息。这份清单里每一条都在真实照镜中造成过错误结论，写进 skill 是为了让你不必再踩一遍：
+
+- **fork 副本**让原始数字虚高 41.2%，不去重全错。
+- **伪真人消息**：定时任务与 hook 注入的消息也带 `type: user`。最阴的一次，19 条注入消息百分之百落进了「实质判断」这一类，而那正是当次要考察的那一类。
+- **时区**：按 UTC 分月会把每天早八点前的工作算到前一天。
+- **子串匹配没有词边界**：用「都可以」做匹配，把一句劈头盖脸的打回判成了放行。
+- **会话结构变化会伪装成行为变化**：某月会话数从 9 涨到 113，单会话从 41.7 条掉到 7.4 条，于是「会话末结束」的比例翻了七倍。这不是行为变了，是分母变了。
+- **口径不统一而不自知**：同一窗口同一数据源，三份取证报出三个不同的消息总数。合稿前必须统一并公示。
+- **负例要全量枚举**：正则的假阴性通常远多于假阳性。实测某次正则漏判了 69% 的真信号。
+
 ### 关于「判断力指纹」这一层
 
 这是整个 skill 里最容易做成假指标的一层，所以把它的设计写在这里。
@@ -80,7 +92,15 @@ Four mirrors for a company of one. A Claude Code skill that audits you, not your
 
 配三条趋势信号看衰减：打回时自带正样本的比例、回应里引用产物具体细节的比例、追问密度。再配两条反向证据：自己查证与纠正 AI 事实错误的次数（上升则退化假说被证伪），以及一条交叉判定（反驳率下降可能是 AI 变准了，必须和「事后被证明 AI 错了」的次数交叉看）。
 
-**结论纪律**：数据不支持退化就明确写不支持。这一层的价值不在于确认担忧，在于给出一个能逐月跟踪的真指标。
+实跑之后补了三条，都是踩出来的：
+
+- **回访必须在回合级测，不能在文件级测。**第一版把回访定义为「放行后写入的文件是否被再次触碰」，手验第一个样本就崩了：一个被判「死产物」的草稿，其实是被连改 18 次后改名转格式发布走了。**它没死，它毕业了。**产物会改名、会转格式、会被发布走，「没人再碰这个 path」不等于「没人再看这件事」。
+- **查验信号必须手判。**真实的回访常常长成一句劈头盖脸的质问，不含任何「检查」「看了」类词。实测正则漏判了 69%。
+- **真正的信号在链长，不在占比。**纯放行实测只占全部消息的 0.9%，用它判断退化毫无分辨力。而连续放行链越长回访率越低（连放一次 53%，三次以上 36.4%）。该盯的是「连放三次以上」的链数。
+
+**结论纪律**：数据不支持退化就明确写不支持。这一层的价值不在于确认担忧，在于给出一个能逐月跟踪的真指标。第一次实跑的结论就是「不支持退化」，四条独立指标全部反向，其中两条原本是用来证实退化的。
+
+**这一层唯一没能度量的事，也要说清楚**：回访率只回答有没有回来看，不回答那次委托本身是否明智。一次经过验证的高质量放行，和一次侥幸没出事的鲁莽放行，在这份数据里长得一模一样。
 
 ### 谥
 
@@ -202,6 +222,18 @@ Most retrospectives produce what you could have summarized yourself in five minu
 
 Rules 7 and 8 exist because the mirror's own reviewer caught it cheating. That story is below.
 
+### Known forensic traps
+
+Get the data cleaning wrong and every downstream analysis is garbage, silently. Every item below produced a wrong conclusion in a real session; they are written into the skill so you do not have to rediscover them:
+
+- **Forked sessions** duplicate content wholesale, inflating raw counts by 41.2% in one measured case.
+- **Fake human messages**: scheduled tasks and hook injections also carry `type: user`. The nastiest instance: 19 injected messages landed 100% in the "substantive judgment" bucket, which was exactly the bucket under examination.
+- **Timezones**: bucketing by UTC pushes every pre-8am hour into the previous day.
+- **Substring matching without word boundaries**: matching a permissive phrase turned a blistering rejection into a green light.
+- **Changes in session structure masquerade as changes in behavior**: when session count went from 9 to 113 and messages per session fell from 41.7 to 7.4, the "ended at session end" rate rose sevenfold. The behavior did not change; the denominator did.
+- **Inconsistent counting nobody notices**: three forensic passes over the same window reported three different message totals. Reconcile and publish the number before writing.
+- **Enumerate the negatives**: a regex's false negatives usually outnumber its false positives. One measured pass missed 69% of the real signal.
+
 ### On the judgment layer
 
 This is the layer most easily turned into a fake metric, so here is its design.
@@ -216,7 +248,15 @@ Healthy delegation and genuine abdication look identical in the message text. Th
 
 Three trend signals track erosion: the share of rejections that arrive with a positive example attached, the share of responses citing concrete details of the artifact, and question density. Two counter-signals guard against a foregone conclusion: how often you verify things yourself or correct the AI on facts (rising falsifies the decay hypothesis), and a cross-check (a falling rebuttal rate may mean the AI got more accurate, so it must be read against how often the AI later turned out wrong).
 
-**Discipline on conclusions**: if the data does not support decay, say so plainly. The value of this layer is not confirming the worry; it is producing a real metric you can track month over month.
+Three more lessons, each learned the hard way on the first real run:
+
+- **Measure revisits at the turn level, not the file level.** The first version defined a revisit as "was the file written after the green light ever touched again." Hand-verifying the first sample broke it: a draft classified as dead had in fact been edited 18 times, renamed, converted, and published. **It did not die, it graduated.** Artifacts get renamed, converted and shipped elsewhere; "nobody touched that path again" is not "nobody looked at that thing again."
+- **Adjudicate the check signal by hand.** A real revisit often looks like a blistering question containing none of the words a regex looks for. One measured pass missed 69% of them.
+- **The signal lives in chain length, not in share.** Pure green lights were 0.9% of all messages, far too rare to discriminate anything. But the longer the unbroken chain of green lights, the lower the revisit rate (53% after one, 36.4% after three or more). The number to watch is how many chains run three deep.
+
+**Discipline on conclusions**: if the data does not support decay, say so plainly. The value of this layer is not confirming the worry; it is producing a real metric you can track month over month. On its first run the verdict was no decay: four independent indicators all pointed the other way, two of them the very ones meant to establish decay.
+
+**State plainly what this layer cannot measure**: revisit rate answers whether you came back to look, never whether that delegation was wise in the first place. A well-judged handoff and a reckless one that happened not to blow up look identical in this data.
 
 ### The posthumous name
 
