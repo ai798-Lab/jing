@@ -30,10 +30,11 @@ Four mirrors for a company of one. A Claude Code skill that audits you, not your
 | **AI 产出的命运** | 你让 AI 做的东西后来死于何处：被采纳 / 被重做 N 版 / 被扔掉 / 完工后再没打开 |
 | **taste diff** | 从打回案例的 v1 与终版对比里，编译出你的品味函数 |
 | **协作病理与浪费账本** | 人机界面本身在哪漏水，AI 侧哪些劳动毫无意义，以及每条浪费对应的禁令 |
-| **工具存量盘点** | 你装了多少 skill，其中多少是活的。含「自建但从未被自己用过」清单，以及无效加载烧掉的 token |
+| **工具存量盘点** | skill / MCP / 插件三类分开算成本，多少是活的。含「自建但从未被自己用过」清单、零调用 MCP 的常驻 schema 开销、hook 每会话注入的无声成本 |
 | **踩坑萃取率** | 踩了之后是长记性还是反复踩。萃取与复发交叉出四象限，最值钱的是「已萃取但仍复发」那一格 |
+| **判断力指纹** | 唯一照你自己的一层。你的判断力是在变强，还是在被 AI 稀释 |
 
-后五层是 v0.2 新增的：前四层照的是「你做了什么」，后五层第一次照「AI 做了什么、结局如何、你的品味长什么样、你的工具有多少在活着、你的坑有多少变成了资产」。
+后六层是 v0.2 新增的：前四层照的是「你做了什么」，后六层第一次照「AI 做了什么、结局如何、你的品味长什么样、你的工具有多少在活着、你的坑有多少变成了资产、以及你自己还在不在判断」。
 
 输出是一份镜鉴：数据速览、环比裁决、四镜成像、作废清单、浪费账本与禁令、共识与分歧、决议与跟踪，末尾为这个月上一字谥号。
 
@@ -64,6 +65,22 @@ Four mirrors for a company of one. A Claude Code skill that audits you, not your
 8. **越抓眼球的发现，验得越狠**：「与常识相反」是危险信号不是加分项，必须额外亲验并公示记录。
 
 第 7、8 条是被自己的复核打脸打出来的，故事见下。
+
+### 关于「判断力指纹」这一层
+
+这是整个 skill 里最容易做成假指标的一层，所以把它的设计写在这里。
+
+有人会担心：长期用 AI，自己的判断力会不会退化？把这个担忧变成指标的第一直觉，是统计「按你的来」「继续」「好」这类消息的占比。**这个做法是错的**，它把表达成本当成了判断含量。「A」可能是全月最重的一次拍板，长消息也可能零判断。更关键的是，把不该自己做的事交出去是正确分工，**委托不等于退化**。
+
+真正的判据是这一条：
+
+> 「按你的来」本身没问题。「按你的来」之后再也没打开过那个产物，才是问题。
+
+健康的委托和真正的放弃，在消息文本上一模一样，区别只在于**之后有没有回来看**。这把一个不可测的心理状态（有没有在思考），换成了一个可测的行为（有没有回访）。所以核心指标是**放行后的回访率**，不是放行占比。
+
+配三条趋势信号看衰减：打回时自带正样本的比例、回应里引用产物具体细节的比例、追问密度。再配两条反向证据：自己查证与纠正 AI 事实错误的次数（上升则退化假说被证伪），以及一条交叉判定（反驳率下降可能是 AI 变准了，必须和「事后被证明 AI 错了」的次数交叉看）。
+
+**结论纪律**：数据不支持退化就明确写不支持。这一层的价值不在于确认担忧，在于给出一个能逐月跟踪的真指标。
 
 ### 谥
 
@@ -149,10 +166,11 @@ Once a month, it runs seven layers of forensics over local data:
 | **The fate of AI output** | Where the things you asked for actually died: adopted / redone N times / thrown away / never opened again after completion |
 | **Taste diff** | Your taste function, compiled from v1-versus-final diffs of the work you rejected |
 | **Collaboration pathology and waste ledger** | Where the human-AI interface leaks, which AI labor was meaningless, and the specific prohibition each waste item implies |
-| **Tooling inventory** | How many skills you have installed and how many are actually alive, including the ones you built and never used yourself, plus the tokens burned on skills loaded but never followed |
+| **Tooling inventory** | Skills, MCP servers and plugins costed separately, and how many are actually alive: the ones you built and never used, the resident schema cost of MCP servers you never call, the silent per-session injection cost of hooks |
 | **Pitfall-to-asset rate** | Whether hitting a wall taught you anything. Extraction and recurrence cross into four quadrants; the valuable one is "extracted and still recurring" |
+| **Judgment fingerprint** | The only layer that examines you. Is your judgment getting sharper, or being diluted by the AI |
 
-The last five layers are new in v0.2. The first four examine what you did; these five are the first look at what the AI did, how it ended, what your taste looks like written down, how much of your tooling is alive, and how many of your mistakes became assets.
+The last six layers are new in v0.2. The first four examine what you did; these six are the first look at what the AI did, how it ended, what your taste looks like written down, how much of your tooling is alive, how many of your mistakes became assets, and whether you are still the one judging.
 
 The output is a mirror report: data overview, month-over-month rulings, four independent mirror readings, a retraction list, the waste ledger with its prohibitions, consensus and disagreements, resolutions with follow-ups, and at the end, one character that names your month.
 
@@ -183,6 +201,22 @@ Most retrospectives produce what you could have summarized yourself in five minu
 8. **The more striking the finding, the harder it gets verified.** "Counterintuitive" is a warning sign, not a selling point. Such claims require extra hand-verification against raw data, with the verification log published in the report.
 
 Rules 7 and 8 exist because the mirror's own reviewer caught it cheating. That story is below.
+
+### On the judgment layer
+
+This is the layer most easily turned into a fake metric, so here is its design.
+
+A natural worry: does leaning on AI erode your own judgment? The first instinct is to count messages like "sure, go ahead" and "continue" and call that abdication. **That is wrong.** It mistakes cost of expression for amount of judgment. A single letter "A" can be the heaviest decision of the month; a long message can carry none. And delegating what you should not be doing yourself is correct division of labor. **Delegation is not decay.**
+
+The real criterion is this:
+
+> "Go ahead" is fine. "Go ahead" followed by never opening that artifact again is not.
+
+Healthy delegation and genuine abdication look identical in the message text. The only difference is whether you came back to look. That converts an unmeasurable mental state (were you thinking?) into a measurable behavior (did you return?). So the core metric is **the revisit rate after a green light**, not the share of green lights.
+
+Three trend signals track erosion: the share of rejections that arrive with a positive example attached, the share of responses citing concrete details of the artifact, and question density. Two counter-signals guard against a foregone conclusion: how often you verify things yourself or correct the AI on facts (rising falsifies the decay hypothesis), and a cross-check (a falling rebuttal rate may mean the AI got more accurate, so it must be read against how often the AI later turned out wrong).
+
+**Discipline on conclusions**: if the data does not support decay, say so plainly. The value of this layer is not confirming the worry; it is producing a real metric you can track month over month.
 
 ### The posthumous name
 
